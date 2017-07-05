@@ -49,9 +49,9 @@ message(STATUS "CMAKE MODULE PATH IS ${CMAKE_MODULE_PATH}")
 find_package(OpenCV REQUIRED COMPONENTS core highgui)
 message(STATUS "Found OpenCV At ${OpenCV_INCLUDE_DIRS}")
 
-find_library(OPENVDB_LIBRARY NAMES openvdb)
-find_library(TBB_LIBRARY NAMES tbb)
-find_library(HALF_LIBRARY NAMES Half)
+#find_library(OPENVDB_LIBRARY NAMES openvdb)
+#find_library(TBB_LIBRARY NAMES tbb)
+#find_library(HALF_LIBRARY NAMES Half)
 find_library(PCL 1.8 REQUIRED COMPONENTS common gpu)
 
 find_package(CUDA REQUIRED)
@@ -72,17 +72,20 @@ find_package(catkin REQUIRED COMPONENTS
   tf
   pcl_ros
   visualization_msgs
+  tf_conversions
 )
 
 add_message_files(
  FILES
  TSDF.msg
+ SparseTSDF.msg
 )
 
 add_service_files(
  FILES
  GetTSDF.srv
- GetMesh.srv
+ GetSparseTSDF.srv
+ #GetMesh.srv
 )
 
 
@@ -95,7 +98,7 @@ generate_messages(
 catkin_package(
   INCLUDE_DIRS include
   LIBRARIES yak
-  CATKIN_DEPENDS cv_bridge image_transport rosconsole roscpp sensor_msgs pcl_ros visualization_msgs
+  CATKIN_DEPENDS cv_bridge image_transport rosconsole roscpp sensor_msgs pcl_ros visualization_msgs Eigen3 tf_conversions
 )
 
 
@@ -140,16 +143,13 @@ cuda_add_library(yak
    ${CUDA_LIBRARIES}
    ${CUDA_CUDA_LIBRARY}
    ${OpenCV_LIBS}
-   openvdb
-   Half
-   tbb
+   #openvdb
+   #Half
+   #tbb
  )
 
 add_executable(kinfu_node
   src/kinfu_node.cpp)
-
-add_executable(meshing_node
-  src/meshing_node.cpp)
 
 add_definitions(${PCL_DEFINITIONS})
 
@@ -159,15 +159,6 @@ target_link_libraries(kinfu_node
  ${CUDA_LIBRARIES}
  ${CUDA_CUDA_LIBRARY}
  ${OpenCV_LIBS}
-)
-
-target_link_libraries(meshing_node
-  yak
-  ${catkin_LIBRARIES}
-  ${CUDA_LIBRARIES}
-  ${CUDA_CUDA_LIBRARY}
-  ${OpenCV_LIBS}
-  ${PCL_COMMON_LIBRARIES}
 )
 
  install(TARGETS yak kinfu_node
