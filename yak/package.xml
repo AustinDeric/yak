@@ -18,12 +18,8 @@
   <depend>tf</depend>
   <depend>pcl_ros</depend>
   <depend>visualization_msgs</depend>
-  <depend>Eigen3</depend>
+  <depend>eigen</depend><!--maps to Eigen3 -->
   <depend>tf_conversions</depend>
-
-
-
-
 
   <export>
   </export>
