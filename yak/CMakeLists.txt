@@ -111,10 +111,12 @@ include_directories(
   ${PCL_INCLUDE_DIRS}
   ${EIGEN3_INCLUDE_DIR}
 )
+
 message("debugging")
 message("PCL_INCLUDE_DIRS: ${PCL_INCLUDE_DIRS}")
 message("CUDA_INCLUDE_DIRS: ${CUDA_INCLUDE_DIRS}")
 message("CUDA_CUDA_LIBRARY: ${CUDA_CUDA_LIBRARY}")
+message("LIBRARY_PATH: ${LIBRARY_PATH}")
 
 set(HAVE_CUDA 1)
 #list(APPEND CUDA_NVCC_FLAGS "-arch;compute_20")
@@ -144,7 +146,7 @@ cuda_add_library(yak
  target_link_libraries(yak
    ${catkin_LIBRARIES}
    ${CUDA_LIBRARIES}
-   ${CUDA_CUDA_LIBRARY}
+   ${LIBRARY_PATH}
    ${OpenCV_LIBS}
    #openvdb
    #Half
@@ -160,7 +162,7 @@ target_link_libraries(kinfu_node
  yak
  ${catkin_LIBRARIES}
  ${CUDA_LIBRARIES}
- ${CUDA_CUDA_LIBRARY}
+ ${LIBRARY_PATH}
  ${OpenCV_LIBS}
 )
 
