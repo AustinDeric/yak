@@ -54,7 +54,7 @@ APPEND_TARGET_ARCH_FLAGS()
 message(STATUS "CUDA_BIN_ARCH ${CUDA_ARCH_BIN}")
 
 find_package(Eigen3 REQUIRED)
-find_package(PCL 1.8 REQUIRED common gpu)
+find_package(PCL 1.8 REQUIRED)
 
 find_package(catkin REQUIRED COMPONENTS
   cv_bridge
@@ -116,6 +116,7 @@ include_directories(${PROJECT_SOURCE_DIR}/include/yak)
 include_directories(${PROJECT_SOURCE_DIR}/src)
 
 link_directories(${PCL_LIBRARY_DIRS})
+add_definitions(${PCL_DEFINITIONS})
 
 cuda_add_library(yak
       src/core.cpp
@@ -141,8 +142,6 @@ cuda_add_library(yak
 
 add_executable(kinfu_node
   src/kinfu_node.cpp)
-
-add_definitions(${PCL_DEFINITIONS})
 
 target_link_libraries(kinfu_node
  yak
