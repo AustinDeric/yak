@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/AustinDeric/yak.svg?branch=master)](https://travis-ci.org/AustinDeric/yak)
+
 # yak 
 yak (yet another kinfu) is a library and ros wrapper for truncated sign distance fields (TSDF). 
 
