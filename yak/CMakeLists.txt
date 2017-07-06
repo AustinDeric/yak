@@ -65,11 +65,6 @@ message(STATUS "CUDA_BIN_ARCH ${CUDA_ARCH_BIN}")
 
 find_package(Eigen3 REQUIRED)
 
-#SET( EIGEN3_INCLUDE_DIR "$ENV{EIGEN3_INCLUDE_DIR}" )
-#IF( NOT EIGEN3_INCLUDE_DIR )
-#    MESSAGE( FATAL_ERROR "Please point the environment variable EIGEN3_INCLUDE_DIR to the include directory of your Eigen3 installation.")
-#ENDIF()
-
 find_package(catkin REQUIRED COMPONENTS
   cv_bridge
   image_transport
@@ -105,7 +100,7 @@ generate_messages(
 catkin_package(
   INCLUDE_DIRS include
   LIBRARIES yak
-  CATKIN_DEPENDS cv_bridge image_transport rosconsole roscpp sensor_msgs pcl_ros visualization_msgs Eigen3 tf_conversions
+  CATKIN_DEPENDS cv_bridge image_transport rosconsole roscpp sensor_msgs pcl_ros visualization_msgs tf_conversions
 )
 
 
