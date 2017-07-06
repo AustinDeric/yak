@@ -3,26 +3,23 @@ cmake_minimum_required(VERSION 2.8.3)
 project(yak)
 add_definitions(-std=c++11)
 
-#compute flags macros
+
 MACRO(CUDA_COMPUTE_TARGET_FLAGS arch_bin arch_ptx cuda_nvcc_target_flags)
     string(REGEX REPLACE "\\." "" ARCH_BIN_WITHOUT_DOTS "${${arch_bin}}")
     string(REGEX REPLACE "\\." "" ARCH_PTX_WITHOUT_DOTS "${${arch_ptx}}")
 
     set(cuda_computer_target_flags_temp "")
 
-    # Tell NVCC to add binaries for the specified GPUs
+
     string(REGEX MATCHALL "[0-9()]+" ARCH_LIST "${ARCH_BIN_WITHOUT_DOTS}")
     foreach(ARCH IN LISTS ARCH_LIST)
         if (ARCH MATCHES "([0-9]+)\\(([0-9]+)\\)")
-            # User explicitly specified PTX for the concrete BIN
             set(cuda_computer_target_flags_temp ${cuda_computer_target_flags_temp} -gencode arch=compute_${CMAKE_MATCH_2},code=sm_${CMAKE_MATCH_1})
         else()
-            # User didn't explicitly specify PTX for the concrete BIN, we assume PTX=BIN
             set(cuda_computer_target_flags_temp ${cuda_computer_target_flags_temp} -gencode arch=compute_${ARCH},code=sm_${ARCH})
         endif()
     endforeach()
 
-    # Tell NVCC to add PTX intermediate code for the specified architectures
     string(REGEX MATCHALL "[0-9]+" ARCH_LIST "${ARCH_PTX_WITHOUT_DOTS}")
     foreach(ARCH IN LISTS ARCH_LIST)
         set(cuda_computer_target_flags_temp ${cuda_computer_target_flags_temp} -gencode arch=compute_${ARCH},code=compute_${ARCH})
@@ -43,16 +40,9 @@ ENDMACRO()
 
 list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake/Modules/")
 message(STATUS "CMAKE MODULE PATH IS ${CMAKE_MODULE_PATH}")
-#include(cmake/Utils.cmake)
-#include(cmake/Targets.cmake)
 
 find_package(OpenCV REQUIRED COMPONENTS core highgui)
 message(STATUS "Found OpenCV At ${OpenCV_INCLUDE_DIRS}")
-
-#find_library(OPENVDB_LIBRARY NAMES openvdb)
-#find_library(TBB_LIBRARY NAMES tbb)
-#find_library(HALF_LIBRARY NAMES Half)
-find_library(PCL 1.8 REQUIRED COMPONENTS common gpu)
 
 find_package(CUDA REQUIRED)
 if(${CUDA_VERSION_STRING} VERSION_GREATER "4.1")
@@ -64,6 +54,7 @@ APPEND_TARGET_ARCH_FLAGS()
 message(STATUS "CUDA_BIN_ARCH ${CUDA_ARCH_BIN}")
 
 find_package(Eigen3 REQUIRED)
+find_package(PCL 1.8 REQUIRED common gpu)
 
 find_package(catkin REQUIRED COMPONENTS
   cv_bridge
@@ -87,7 +78,6 @@ add_service_files(
  FILES
  GetTSDF.srv
  GetSparseTSDF.srv
- #GetMesh.srv
 )
 
 
@@ -119,7 +109,6 @@ message("CUDA_CUDA_LIBRARY: ${CUDA_CUDA_LIBRARY}")
 message("LIBRARY_PATH: ${LIBRARY_PATH}")
 
 set(HAVE_CUDA 1)
-#list(APPEND CUDA_NVCC_FLAGS "-arch;compute_20")
 list(APPEND CUDA_NVCC_FLAGS "-gencode;arch=compute_20,code=sm_20;-gencode;arch=compute_20,code=sm_21;-gencode;arch=compute_30,code=sm_30;-gencode;arch=compute_35,code=sm_35")
   list(APPEND CUDA_NVCC_FLAGS "-Xcompiler;-fPIC;")
 
@@ -148,9 +137,6 @@ cuda_add_library(yak
    ${CUDA_LIBRARIES}
    ${LIBRARY_PATH}
    ${OpenCV_LIBS}
-   #openvdb
-   #Half
-   #tbb
  )
 
 add_executable(kinfu_node
