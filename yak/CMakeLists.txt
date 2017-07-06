@@ -63,10 +63,12 @@ if(${CUDA_VERSION_STRING} VERSION_GREATER "4.1")
 APPEND_TARGET_ARCH_FLAGS()
 message(STATUS "CUDA_BIN_ARCH ${CUDA_ARCH_BIN}")
 
-SET( EIGEN3_INCLUDE_DIR "$ENV{EIGEN3_INCLUDE_DIR}" )
-IF( NOT EIGEN3_INCLUDE_DIR )
-    MESSAGE( FATAL_ERROR "Please point the environment variable EIGEN3_INCLUDE_DIR to the include directory of your Eigen3 installation.")
-ENDIF()
+find_package(Eigen3 REQUIRED)
+
+#SET( EIGEN3_INCLUDE_DIR "$ENV{EIGEN3_INCLUDE_DIR}" )
+#IF( NOT EIGEN3_INCLUDE_DIR )
+#    MESSAGE( FATAL_ERROR "Please point the environment variable EIGEN3_INCLUDE_DIR to the include directory of your Eigen3 installation.")
+#ENDIF()
 
 find_package(catkin REQUIRED COMPONENTS
   cv_bridge
