@@ -1,4 +1,6 @@
 <launch>
+<!-- TODO change this launch file to include yak.launch and yak_mehsing.launch -->
+
     <!-- Remap the depth and color image topics to the ones output by the
          sensor of your choice -->
     <remap from="/camera/depth/image_raw" to="/sim_camera/depth"/>

@@ -99,7 +99,8 @@ bool Explorer::MoveToNBVs(moveit::planning_interface::MoveGroupInterface &move_g
     planning_interface::MotionPlanRequest req;
     planning_interface::MotionPlanResponse res;
 
-    req.group_name = "manipulator_ensenso";
+    //todo replace this with param
+    req.group_name = "eef_group";
     req.allowed_planning_time = 0.5;
 
     std::vector<double> tolerance_pose(3, 0.01);
@@ -124,7 +125,8 @@ bool Explorer::MoveToNBVs(moveit::planning_interface::MoveGroupInterface &move_g
       geometry_msgs::PoseStamped targetPoseStamped;
       targetPoseStamped.pose = targetPose;
       targetPoseStamped.header.frame_id = "base_link";
-      goal = kinematic_constraints::constructGoalConstraints("ensenso_sensor_optical_frame", targetPoseStamped, tolerance_pose, tolerance_angle);
+      //todo replace this with param
+      goal = kinematic_constraints::constructGoalConstraints("camera_link", targetPoseStamped, tolerance_pose, tolerance_angle);
       req.goal_constraints.clear();
       req.goal_constraints.push_back(goal);
       planning_pipeline->generatePlan(planning_scene, req, res);
@@ -163,8 +165,8 @@ int main(int argc, char* argv[])
     ros::init(argc, argv, "exploration_controller_node");
     ros::NodeHandle nh;
 
-
-    moveit::planning_interface::MoveGroupInterface move_group("manipulator_ensenso");
+    //todo replace with arg from launch file
+    moveit::planning_interface::MoveGroupInterface move_group("eef_group");
     move_group.setPlanningTime(30.0);
 
     Explorer explorer(nh);

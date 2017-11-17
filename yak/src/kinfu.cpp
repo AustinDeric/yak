@@ -255,7 +255,7 @@ bool kfusion::KinFu::operator()(const Affine3f& inputCameraMotion, const Affine3
         ok =  icp_->estimateTransform(cameraMotion, cameraMotionCorrected, p.intr, curr_.points_pyr, curr_.normals_pyr, prev_.points_pyr, prev_.normals_pyr);
         cameraPoseCorrected = previousCameraPose * cameraMotionCorrected;
 
-        ROS_INFO_STREAM("\nMotion Input: " << cameraMotion.matrix << "\nMotion Corrected: " << cameraMotionCorrected.matrix << "\nPose Input: " << currentCameraPose.matrix << "\nPose Corrected: " << cameraPoseCorrected.matrix << "\n");
+        //ROS_INFO_STREAM("\nMotion Input: " << cameraMotion.matrix << "\nMotion Corrected: " << cameraMotionCorrected.matrix << "\nPose Input: " << currentCameraPose.matrix << "\nPose Corrected: " << cameraPoseCorrected.matrix << "\n");
 //        cameraPoseCorrected = cameraPose;
 //        cameraMotion = cameraMotionCorrected;
     }
@@ -273,7 +273,7 @@ bool kfusion::KinFu::operator()(const Affine3f& inputCameraMotion, const Affine3
     if (params_.update_via_sensor_motion){
         // Update pose with latest measured pose
         // TODO: Make this not put the estimated sensor pose in the wrong position relative to the global frame.
-        cout << "Updating via motion" << endl;
+        //cout << "Updating via motion" << endl;
         poses_.push_back(poses_.back() * cameraMotionCorrected);
     } else {
         // Update pose estimate using latest camera motion transform
@@ -285,14 +285,14 @@ bool kfusion::KinFu::operator()(const Affine3f& inputCameraMotion, const Affine3
     // Volume integration
 
     // This is the transform from the origin of the volume to the camera.
-    cout << "Newest pose is  " << poses_.back().matrix << endl;
+    //cout << "Newest pose is  " << poses_.back().matrix << endl;
 
     // We do not integrate volume if camera does not move.
     // TODO: As it turns out I do care about this! Leaving the camera in one place introduces a lot of noise. Come up with a better metric for determining motion.
     float rnorm = (float) cv::norm(cameraMotion.rvec());
     float tnorm = (float) cv::norm(cameraMotion.translation());
 
-    cout << "Rnorm " << rnorm << "  Tnorm " << tnorm << endl;
+    //cout << "Rnorm " << rnorm << "  Tnorm " << tnorm << endl;
 
     bool integrate = (rnorm + tnorm) / 2 >= p.tsdf_min_camera_movement;
     if (integrate)
