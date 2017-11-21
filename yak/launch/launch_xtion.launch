@@ -1,6 +1,6 @@
 <launch>
 
-  <include file="$(find openni2_launch)/launch/openni2.launch"/>
+  <!--<include file="$(find openni2_launch)/launch/openni2.launch"/>-->
   <include file="$(find yak)/launch/yak.launch"/>
   <include file="$(find yak)/launch/yak_meshing.launch"/>
 

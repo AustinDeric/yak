@@ -140,8 +140,8 @@ class VolumePosePublisher {
       box_line_list.points.push_back(c4);
       box_line_list.points.push_back(c8);
 
-
-      tf::StampedTransform transformStamped(currentOriginPose, ros::Time::now(), "base_link", "volume_pose");
+      //todo, make world frame a passed parameter
+      tf::StampedTransform transformStamped(currentOriginPose, ros::Time::now(), "tsdf_frame", "volume_pose");
 
       broadcaster_.sendTransform(transformStamped);
 

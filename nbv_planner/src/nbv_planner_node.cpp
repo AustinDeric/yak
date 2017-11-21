@@ -1,5 +1,8 @@
 #include "nbv_planner/nbv_planner_node.hpp"
 
+
+static const std::string REF_FRAME = "volume_pose";
+
 NBVSolver::NBVSolver(ros::NodeHandle &nh)
 {
   nbv_server_ = nh.advertiseService("get_nbv", &NBVSolver::GetNBV, this);
@@ -46,6 +49,7 @@ bool NBVSolver::GetNBV(nbv_planner::GetNBV::Request &req, nbv_planner::GetNBV::R
   // Download the octomap from octomap_server
   ROS_INFO("Attempting to get octomap");
   octomap_msgs::GetOctomap srv;
+  ros::service::waitForService("/octomap_full");
   if (!octomap_client_.call(srv))
   {
     ROS_INFO("Couldn't get octomap");
@@ -138,10 +142,13 @@ bool NBVSolver::GetNBV(nbv_planner::GetNBV::Request &req, nbv_planner::GetNBV::R
     res.exploration_done = false;
   }
 
+  res.bestViewPose.header.frame_id = REF_FRAME;
+  res.bestViewPose.header.stamp = ros::Time::now();
+
   // Return the list of candidate poses.
   tf::StampedTransform base_to_volume;
-  listener_.waitForTransform("base_link", "volume_pose", ros::Time::now(), ros::Duration(0.5));
-  listener_.lookupTransform("base_link", "volume_pose", ros::Time(0), base_to_volume);
+  listener_.waitForTransform("base_link", REF_FRAME, ros::Time::now(), ros::Duration(0.5));
+  listener_.lookupTransform("base_link", REF_FRAME, ros::Time(0), base_to_volume);
 
   for (int i = 0; i < viewsWithMetrics.size(); i++) {
     ROS_INFO_STREAM(std::get<1>(viewsWithMetrics[i]));

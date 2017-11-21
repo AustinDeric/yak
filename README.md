@@ -46,7 +46,7 @@ Executing rosrun nbv_planner exploration_controller_node will execute an explora
 2. Launch the TSDF reconstruction nodes. For example, roslaunch yak launch_xtion_robot.launch.
 3. Launch the drivers for the RGBD camera. For the Asus Xtion, this is roslaunch openni2_launch openni2.launch.
 4. Start the octomap server: roslaunch nbv_planner octomap_mapping.launch
-5. When you want to start exploration: rosrun nbv_planner exploration_controller_node 
+5. When you want to start exploration: rosrun nbv_planner exploration_controller_node
 6. When you decide that the reconstruction is good enough: rosservice call /get_mesh
 
 # Build with Docker:
