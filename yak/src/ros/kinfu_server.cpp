@@ -22,8 +22,13 @@ namespace kfusion
         }
         ROS_INFO_STREAM("Use pose hints set to " << use_pose_hints_);
         if (use_pose_hints_) {
-          tfListener_.waitForTransform("volume_pose", "ensenso_sensor_optical_frame", ros::Time::now(), ros::Duration(0.5));
-          tfListener_.lookupTransform("volume_pose", "ensenso_sensor_optical_frame", ros::Time(0), previous_volume_to_sensor_transform_);
+            try {
+                  tfListener_.waitForTransform("volume_pose", "ensenso_sensor_optical_frame", ros::Time::now(), ros::Duration(0.5));
+                  tfListener_.lookupTransform("volume_pose", "ensenso_sensor_optical_frame", ros::Time(0), previous_volume_to_sensor_transform_);
+                 }
+            catch (tf::TransformException ex){
+                ROS_ERROR("%s", ex.what());
+            }
         }
     }
 
