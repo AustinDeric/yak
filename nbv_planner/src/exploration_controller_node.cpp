@@ -68,6 +68,7 @@ bool Explorer::MoveToNBVs(moveit::planning_interface::MoveGroupInterface &move_g
     volumeBoxPosConstraint.constraint_region = volume;
     volumeBoxPosConstraint.link_name = "sensor_constraint_frame";
     volumeBoxPosConstraint.header.frame_id = "base_link";
+    volumeBoxPosConstraint.weight = 1;
 
     cameraPoseConstraints.position_constraints.push_back(volumeBoxPosConstraint);
 
